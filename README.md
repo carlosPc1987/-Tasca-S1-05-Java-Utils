@@ -12,49 +12,52 @@ AUTOR
 Carlos de Cozar 
 GitHub: https://github.com/carlosPc1987/-Tasca-S1-05-Java-Utils.git
 
-REQUISITS DE COMPLECIÓ
------------------------
-- Utilitzar Eclipse o IntelliJ per desenvolupar.
-- Projectes Java senzills, Maven o Gradle són vàlids.
-- Programa íntegrament en anglès.
-- Evita rutes absolutes. Utilitza **rutes relatives**.
-- Fes servir `File.separator` per compatibilitat entre sistemes.
-- Segueix el document de bones pràctiques de l’Sprint 0.
-- **Executa els exercicis des de la línia de comandes**, no només des de l’IDE.
+COMPLETION REQUIREMENTS
+- Use Eclipse or IntelliJ for development.
+- Simple Java projects, Maven or Gradle are acceptable.
+- Program entirely in English.
+- Avoid absolute paths. Use relative paths.
+- Use File.separator for cross-platform compatibility.
+- Follow the best practices document from Sprint 0.
+- Run the exercises from the command line, not just from the IDE.
 
-COMPILAR MANUALMENT
+
+MANUAL COMPILATION
 ---------------------
-Des del directori arrel del projecte:
+From the root directory of the project:
+"C:\Users\cadec\IdeaProjects\Tasca-S1-05-Java Utils"
 
-> javac -d out src/main/java/org/example/nivell1/exercici5/**/*.java
-
-EXECUTAR MANUALMENT
+MANUAL EXECUTION
 ---------------------
-> java -cp out org.example.nivell1.exercici5.application.Main
+out/org/example/nivell1/exercici1/application/Main.class
+out/org/example/nivell1/exercici2/application/Main.class
+out/org/example/nivell1/exercici3/application/Main.class
+out/org/example/nivell1/exercici4/application/Main.class
+out/org/example/nivell1/exercici5/application/Main.class
 
 FUNCIONALITAT
 --------------
-
-L’exercici 5 ofereix 3 accions diferents, seleccionables des de consola:
-
-| ACCIÓ           | DESCRIPCIÓ                                                                 |
-|------------------|-----------------------------------------------------------------------------|
-| listar           | Mostra per pantalla la informació estructurada d’un directori              |
-| serialitzar      | Desa la informació d’un directori en un fitxer `.ser` com a objecte Java   |
-| desserialitzar   | Llegeix el fitxer `.ser` i mostra el contingut deserialitzat per consola   |
+| Action           | DESCRIPTION                                                                |
+|------------------|----------------------------------------------------------------------------|
+| listar           | "Display the structured information of a directory on the screen."         |
+| serialitzar      | "Save the information of a directory into a .ser file as a Java object."   |
+| desserialitzar   | "Read the .ser file and display the deserialized content on the console."  |
 
 
- Uso de utilidades (utils)
-El projecte incorpora classes utils que encapsulan comportamientos genèrics reutilitzables, millorant l’organització i la netedat del codi. Aquests components ajuden a:
-- Simplificar l’accés a operacions comunes (com lectura/escriptura de fitxers, formatació de dades, etc.).
-- Evitar duplicació de codi entre nivells o exercicis.
-- Separar la lògica auxiliar de la lògica principal (separation of concerns).
-- Fer les classes més testejables i mantenibles.
- Exemples d’ús
-- FileUtils: pot contenir mètodes per llegir, escriure o validar rutes i fitxers.
-- DateUtils: pot oferir formatació de dates o càlculs de temps de modificació.
-- SerializationUtils: encapsula la lògica de serialització i desserialització d’objectes Java.
-- ConsoleUtils: ajuda a demanar i validar entrada per consola de forma reutilitzable
+
+ Use of Utilities (utils)
+· The project includes utility classes that encapsulate generic, reusable behaviors, improving code organization and cleanliness. These components help to:
+- Simplify access to common operations (such as file reading/writing, data formatting, etc.).
+- Avoid code duplication across levels or exercises.
+- Separate auxiliary logic from main logic (separation of concerns).
+- Make classes more testable and maintainable.
+· Examples of Use
+- FileUtils: may contain methods for reading, writing, or validating paths and files.
+- DateUtils: may offer date formatting or modification time calculations.
+- SerializationUtils: encapsulates the logic for Java object serialization and deserialization.
+- ConsoleUtils: helps request and validate console input in a reusable way.
+
+
 
    //=============================\\  
   ||   Crafted with 💛 by Carlos  ||  
