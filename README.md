@@ -29,11 +29,11 @@ From the root directory of the project:
 
 MANUAL EXECUTION
 ---------------------
-out/org/example/nivell1/exercici1/application/Main.class
-out/org/example/nivell1/exercici2/application/Main.class
-out/org/example/nivell1/exercici3/application/Main.class
-out/org/example/nivell1/exercici4/application/Main.class
-out/org/example/nivell1/exercici5/application/Main.class
+out/org/example/nivell1/exercici1/application/Main.class;
+out/org/example/nivell1/exercici2/application/Main.class;
+out/org/example/nivell1/exercici3/application/Main.class;
+out/org/example/nivell1/exercici4/application/Main.class;
+out/org/example/nivell1/exercici5/application/Main.class;
 
 FUNCIONALITAT
 --------------
