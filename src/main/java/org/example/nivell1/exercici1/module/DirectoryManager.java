@@ -20,7 +20,7 @@ import java.util.List;
         }
 
         public void listSortedDirectory(String path) throws InvalidDirectoryException {
-            validator.validate(path); // 🔹 Se ejecutan las validaciones
+            validator.validate(path); //
 
             File directory = new File(path);
             List<String> files = Arrays.asList(directory.list());

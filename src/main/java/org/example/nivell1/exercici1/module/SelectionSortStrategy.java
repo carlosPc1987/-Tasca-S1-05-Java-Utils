@@ -17,7 +17,6 @@ public class SelectionSortStrategy implements SortStrategy {
                     minIndex = j;
                 }
             }
-            // Intercambiamos valores manualmente sin Collections.sort
             String temp = sortedList.get(i);
             sortedList.set(i, sortedList.get(minIndex));
             sortedList.set(minIndex, temp);

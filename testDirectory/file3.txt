@@ -1,0 +1,6 @@
+mercurio
+urano
+tierra
+marte
+urano
+pluton

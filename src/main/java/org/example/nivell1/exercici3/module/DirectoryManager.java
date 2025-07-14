@@ -1,60 +1,68 @@
 package org.example.nivell1.exercici3.module;
 
 import org.example.nivell1.exercici1.exceptions.InvalidDirectoryException;
-import org.example.nivell1.exercici1.interfaces.SortStrategy;
-import org.example.nivell1.exercici1.module.DirectoryExistsRule;
-import org.example.nivell1.exercici1.module.DirectoryValidator;
-import org.example.nivell1.exercici1.module.IsDirectoryRule;
-import org.example.nivell1.exercici1.module.IsNotEmptyRule;
+import org.example.nivell1.exercici3.interfaces.AdvancedSortStrategy;
+import org.example.nivell1.exercici3.interfaces.LinePrinter;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.Date;
 
 public class DirectoryManager {
-    private final SortStrategy sorter;
-    private final DirectoryValidator validator;
+    private final AdvancedSortStrategy sortStrategy;
 
-    public DirectoryManager(SortStrategy sorter) {
-        this.sorter = sorter;
-        this.validator = new DirectoryValidator(
-                List.of(new DirectoryExistsRule(), new IsDirectoryRule(), new IsNotEmptyRule())
-        );
+    public DirectoryManager(AdvancedSortStrategy sortStrategy) {
+        this.sortStrategy = sortStrategy;
     }
 
-    public void listDirectoryTree(String path, String outputFile) throws InvalidDirectoryException {
-        validator.validate(path); // Validar el directori
-        try (FileWriter writer = new FileWriter(outputFile)) {
-            listTreeRecursively(new File(path), 0, writer); // Escriure al fitxer
-        } catch (IOException e) {
-            System.out.println("Error al guardar el fitxer: " + e.getMessage());
+    public void listDirectoryTreeToConsole(String path) throws InvalidDirectoryException {
+        File root = new File(path);
+        if (!root.exists() || !root.isDirectory()) {
+            throw new InvalidDirectoryException("El directori no existeix o no és vàlid.");
+        }
+
+        LinePrinter printer = new ConsolePrinter();
+        printer.print(" Contingut de l’arbre de directoris:\n");
+        listRecursively(root, 0, printer);
+    }
+
+    public void listDirectoryTreeToFile(String path, String outputFile) throws InvalidDirectoryException {
+        File root = new File(path);
+        if (!root.exists() || !root.isDirectory()) {
+            throw new InvalidDirectoryException("El directori no existeix o no és vàlid.");
+        }
+
+        try (PrintWriter writer = new PrintWriter(outputFile)) {
+            LinePrinter printer = new FilePrinter(writer);
+            printer.print(" Contingut de l’arbre de directoris:\n");
+            listRecursively(root, 0, printer);
+        } catch (FileNotFoundException e) {
+            throw new InvalidDirectoryException("No s'ha pogut escriure al fitxer de sortida.");
         }
     }
 
-    private void listTreeRecursively(File directory, int depth, FileWriter writer) throws IOException {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            List<File> sortedFiles = sorter.sort(Arrays.stream(files)
-                            .map(File::getName).toList()).stream()
-                    .map(name -> new File(directory, name)).toList();
+    private void listRecursively(File directory, int level, LinePrinter printer) {
+        File[] elements = directory.listFiles();
+        if (elements == null || elements.length == 0) return;
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        File[] sorted = sortStrategy.sort(elements);
+        String indent = "  ".repeat(level);
 
-            for (File file : sortedFiles) {
-                String indentation = "   ".repeat(depth);
-                String lastModified = dateFormat.format(file.lastModified());
-                String type = file.isDirectory() ? "[D]" : "[F]";
+        for (File file : sorted) {
+            String type = file.isDirectory() ? "(D)" : "(F)";
+            String date = formatDate(file.lastModified());
+            printer.print(indent + "• " + file.getName() + " " + type + " - modificat el " + date);
 
-                writer.write(indentation + type + " " + file.getName() + " __ " + lastModified + "\n");
-
-                if (file.isDirectory()) {
-                    listTreeRecursively(file, depth + 1, writer);
-                }
+            if (file.isDirectory()) {
+                listRecursively(file, level + 1, printer);
             }
         }
+    }
+
+    private String formatDate(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return sdf.format(new Date(millis));
     }
 }
