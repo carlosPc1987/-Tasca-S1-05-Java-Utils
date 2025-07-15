@@ -15,7 +15,7 @@ public class DirectoryManagerTest {
 
     @Test
     void testSerializationAndDeserialization() throws Exception {
-        DirectoryManager manager = new DirectoryManager();
+        DirectoryManager manager = new DirectoryManager("src/main/resources/config.properties");
 
         DirectoryInfo originalInfo = new DirectoryInfo("testDirectory",
                 List.of("archivo1.txt", "archivo2.txt"));

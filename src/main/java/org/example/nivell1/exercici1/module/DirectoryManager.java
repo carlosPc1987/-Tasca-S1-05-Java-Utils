@@ -15,7 +15,7 @@ import java.util.List;
         public DirectoryManager(SortStrategy sorter) {
             this.sorter = sorter;
             this.validator = new DirectoryValidator(
-                    List.of(new DirectoryExistsRule(), new IsDirectoryRule(), new IsNotEmptyRule())
+                    List.of(new DirectoryExistsRule(), new DirectoryRule(), new DirectoryContentRule())
             );
         }
 

@@ -12,7 +12,6 @@ public class ConfigManager {
         properties = new Properties();
         try (FileInputStream input = new FileInputStream(configFilePath)) {
             properties.load(input);
-            System.out.println(" Configuración cargada correctamente");
         } catch (IOException e) {
             System.out.println(" Error cargando configuración: " + e.getMessage());
         }

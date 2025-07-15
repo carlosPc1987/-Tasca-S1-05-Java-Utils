@@ -4,8 +4,8 @@ import org.example.nivell1.exercici1.exceptions.InvalidDirectoryException;
 import org.example.nivell1.exercici1.interfaces.SortStrategy;
 import org.example.nivell1.exercici1.module.DirectoryExistsRule;
 import org.example.nivell1.exercici1.module.DirectoryValidator;
-import org.example.nivell1.exercici1.module.IsDirectoryRule;
-import org.example.nivell1.exercici1.module.IsNotEmptyRule;
+import org.example.nivell1.exercici1.module.DirectoryRule;
+import org.example.nivell1.exercici1.module.DirectoryContentRule;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,7 +23,7 @@ public class DirectoryManager {
     public DirectoryManager(SortStrategy sorter) {
         this.sorter = sorter;
         this.validator = new DirectoryValidator(
-                List.of(new DirectoryExistsRule(), new IsDirectoryRule(), new IsNotEmptyRule())
+                List.of(new DirectoryExistsRule(), new DirectoryRule(), new DirectoryContentRule())
         );
     }
 

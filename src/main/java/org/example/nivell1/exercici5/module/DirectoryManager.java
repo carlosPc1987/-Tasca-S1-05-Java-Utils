@@ -1,73 +1,67 @@
 package org.example.nivell1.exercici5.module;
+
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class DirectoryManager {
-
-
-    public DirectoryInfo getDirectoryInfo(String path) {
-        File directory = new File(path);
-        if (!directory.exists() || !directory.isDirectory()) {
-            throw new IllegalArgumentException("El directori no existeix o no és vàlid.");
-        }
-
-        File[] files = directory.listFiles();
-        List<String> fileNames = new ArrayList<>();
-        if (files != null) {
-            fileNames = Arrays.stream(files)
-                    .map(File::getName)
-                    .sorted(String::compareToIgnoreCase)
-                    .toList();
-        }
-        return new DirectoryInfo(path, fileNames);
-    }
-
-    public void serializeDirectory(DirectoryInfo info, String filePath) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(info);
-            System.out.println("Directori serialitzat i guardat a: " + filePath);
-        } catch (IOException e) {
-            System.out.println("Error en la serialització: " + e.getMessage());
-        }
-    }
-
-    public DirectoryInfo deserializeDirectory(String filePath) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (DirectoryInfo) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error en la desserialització: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public void listDirectoryTree() {
-
-        String directoryPath = config.getProperty("directory.path");
-        String outputFile = config.getProperty("output.file");
-
-        File directory = new File(directoryPath);
-        if (!directory.exists() || !directory.isDirectory()) {
-            System.err.println("Error: El directori no existeix o no és vàlid.");
-            return;
-        }
-
-        try (FileWriter writer = new FileWriter(outputFile)) {
-            listTreeRecursively(directory, 0, writer);
-            System.out.println("Resultat guardat a: " + outputFile);
-        } catch (IOException e) {
-            System.err.println("Error al guardar el fitxer: " + e.getMessage());
-        }
-    }
-
-    private void listTreeRecursively(File directory, int i, FileWriter writer) {
-    }
 
     private ConfigManager config;
 
-    public DirectoryManager() {
-        if (config == null) {
-            this.config = config;
+    public DirectoryManager(String configFilePath) {
+        this.config = new ConfigManager(configFilePath);
+    }
+
+    public void listTreeRecursively(File dir, int depth, Writer writer) throws IOException {
+        if (dir == null || !dir.isDirectory()) throw new IllegalArgumentException("Directorio inválido: " + dir);
+
+        String indent = "  ".repeat(depth);
+        writer.write(indent + "[DIR] " + dir.getName() + "\n");
+
+        File[] items = dir.listFiles();
+        if (items == null || items.length == 0) {
+            writer.write(indent + "  (empty)\n");
+            return;
         }
+
+        Arrays.stream(items).forEach(item -> {
+            try {
+                String nextIndent = "  ".repeat(depth + 1);
+                if (item.isDirectory()) {
+                    listTreeRecursively(item, depth + 1, writer);
+                } else {
+                    writer.write(nextIndent + "[FILE] " + item.getName() + "\n");
+                }
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
+    }
+
+    public void serializeDirectory(DirectoryInfo info, String filePath) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            out.writeObject(info);
+        }
+    }
+
+    public DirectoryInfo deserializeDirectory(String filePath) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
+            return (DirectoryInfo) in.readObject();
+        }
+    }
+    public DirectoryInfo getDirectoryInfo(String path) {
+        File dir = new File(path);
+        if (!dir.exists() || !dir.isDirectory()) {
+            throw new IllegalArgumentException("Ruta inválida: " + path);
+        }
+
+        File[] files = dir.listFiles();
+        List<String> fileNames = files == null ? List.of() :
+                Arrays.stream(files)
+                        .filter(File::isFile)
+                        .map(File::getName)
+                        .toList();
+
+        return new DirectoryInfo(dir.getAbsolutePath(), fileNames);
     }
 }

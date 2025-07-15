@@ -2,41 +2,44 @@ package org.example.nivell1.exercici5.application;
 
 import org.example.nivell1.exercici5.module.DirectoryInfo;
 import org.example.nivell1.exercici5.module.DirectoryManager;
-import org.example.nivell1.exercici5.module.ConfigManager;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class MainApp {
     public void executeProgram() {
         Scanner scanner = new Scanner(System.in);
-        ConfigManager config = new ConfigManager("src/main/resources/config.properties");
-        DirectoryManager manager = new DirectoryManager();
+        String path = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "config.properties";
+        DirectoryManager manager = new DirectoryManager(path);
 
-        System.out.print("Acció (listar | serialitzar | desserialitzar): ");
-        String action = scanner.nextLine();
+        System.out.print("Action (list | serialize | deserialize): ");
+        String action = scanner.nextLine().trim();
 
-        if (action.equalsIgnoreCase("desserialitzar")) {
-            DirectoryInfo deserializedInfo = manager.deserializeDirectory("directori.ser");
-            if (deserializedInfo != null) {
-                System.out.println("Objecte desserialitzat:\n" + deserializedInfo);
-            }
-        } else {
-            System.out.print("Introdueix la ruta del directori: ");
-            String path = scanner.nextLine();
-
-            switch (action.toLowerCase()) {
-                case "listar" -> {
-                    DirectoryInfo info = manager.getDirectoryInfo(path);
-                    System.out.println(info);
+        try {
+            if (action.equalsIgnoreCase("deserialize")) {
+                DirectoryInfo deserializedInfo = manager.deserializeDirectory("directory.ser");
+                if (deserializedInfo != null) {
+                    System.out.println("Object deserialization:\n" + deserializedInfo);
                 }
-                case "serialitzar" -> {
-                    DirectoryInfo infoToSerialize = manager.getDirectoryInfo(path);
-                    manager.serializeDirectory(infoToSerialize, "directori.ser");
+            } else {
+                System.out.print("Introdueix la ruta del directory: ");
+                String directoryPath = scanner.nextLine().trim();
+                DirectoryInfo info = manager.getDirectoryInfo(directoryPath);
+
+
+                switch (action.toLowerCase()) {
+                    case "list" -> System.out.println(info);
+                    case "serialize" -> {
+                        manager.serializeDirectory(info, "directory.ser");
+                        System.out.println("Directori serialitzat correctament.");
+                    }
+                    default -> System.out.println("Opció desconeguda. Ús: list | serialize | deserializer");
                 }
-                default -> System.out.println("Opció desconeguda. Ús: listar | serialitzar | desserialitzar");
             }
+        } catch (Exception e) {
+            System.err.println(" Error durant l'execució: " + e.getMessage());
+        } finally {
+            scanner.close();
         }
-
-        scanner.close();
     }
 }

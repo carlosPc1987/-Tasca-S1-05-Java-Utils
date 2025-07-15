@@ -5,7 +5,7 @@ import org.example.nivell1.exercici1.interfaces.DirectoryRule;
 
 import java.io.File;
 
-public class IsNotEmptyRule implements DirectoryRule {
+public class DirectoryContentRule implements DirectoryRule {
     @Override
     public void validate(File directory) throws InvalidDirectoryException {
         if (directory.list() == null) {
